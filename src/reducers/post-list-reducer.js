@@ -1,5 +1,5 @@
 export default function mainPostList(state = {}, action) {
-  const { author, title, post, votes, id } = action;
+  let { author, title, post, upVote, downVote, id } = action;
   switch (action.type) {
     case "ADD_POST":
       return Object.assign({}, state, {
@@ -7,7 +7,8 @@ export default function mainPostList(state = {}, action) {
           author: author,
           title: title,
           post: post,
-          votes: votes,
+          upVote: upVote,
+          downVote: downVote,
           id: id,
         },
       });

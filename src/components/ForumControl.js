@@ -14,13 +14,15 @@ class ForumControl extends React.Component {
 
   handleAddingPost = (newPost) => {
     const { dispatch } = this.props;
-    const { author, title, post, votes, id } = newPost;
+    const { author, title, post, id } = newPost;
+    let { upVote, downVote } = newPost;
     const action = {
       type: "ADD_POST",
       author: author,
       title: title,
       post: post,
-      votes: votes,
+      upVote: upVote,
+      downVote: downVote,
       id: id,
     };
     dispatch(action);
@@ -32,6 +34,41 @@ class ForumControl extends React.Component {
       formVisible: !prevState.formVisible,
     }));
   };
+
+  handleDownVote = (votePost) => {
+    const { dispatch } = this.props;
+    const { author, title, post, id } = votePost;
+    let { upVote, downVote } = votePost;
+    const action = {
+      type: "ADD_POST",
+      author: author,
+      title: title,
+      post: post,
+      upVote: upVote,
+      downVote: (downVote -= 1),
+      id: id,
+    };
+    dispatch(action);
+    this.setState({ formVisible: false });
+  };
+
+  handleUpVote = (votePost) => {
+    const { dispatch } = this.props;
+    let { author, title, post, upVote, downVote, id } = votePost;
+    const action = {
+      type: "ADD_POST",
+      author: author,
+      title: title,
+      post: post,
+      upVote: (upVote += 1),
+      downVote: downVote,
+      id: id,
+    };
+    dispatch(action);
+    this.setState({ formVisible: false });
+    console.log(votePost.upVote);
+  };
+
   render() {
     let buttonText = null;
     let currentlyVisibleState = null;
@@ -40,13 +77,21 @@ class ForumControl extends React.Component {
       currentlyVisibleState = <NewPostForm onNewPost={this.handleAddingPost} />;
       buttonText = "Return to Forum";
     } else {
-      currentlyVisibleState = <PostList postList={this.props.mainPostList} />;
+      currentlyVisibleState = (
+        <PostList
+          postList={this.props.mainPostList}
+          onDownVote={this.handleDownVote}
+          onUpVote={this.handleUpVote}
+        />
+      );
       buttonText = "Create Post";
     }
     return (
       <React.Fragment>
         {currentlyVisibleState}
-        <button onClick={this.handleClick}>{buttonText}</button>
+        <button className="btn btn-secondary" onClick={this.handleClick}>
+          {buttonText}
+        </button>
       </React.Fragment>
     );
   }
@@ -65,3 +110,13 @@ const mapStateToProps = (state) => {
 ForumControl = connect(mapStateToProps)(ForumControl);
 
 export default ForumControl;
+
+// handleEditingTicketInList = (ticketToEdit) => {
+//   const { dispatch } = this.props;
+//   const action = a.addTicket(ticketToEdit);
+//   dispatch(action);
+//   this.setState({
+//     editing: false,
+//     selectedTicket: null
+//   });
+// }

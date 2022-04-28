@@ -1,6 +1,8 @@
 import React from "react";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
+import { TextField, Grid } from "@mui/material";
+import Card from "./shared/Card";
 
 function NewPostForm(props) {
   function handleNewPostSubmission(event) {
@@ -10,35 +12,55 @@ function NewPostForm(props) {
       author: event.target.author.value,
       post: event.target.post.value,
       title: event.target.title.value,
+      upVote: 0,
+      downVote: 0,
       id: v4(),
     });
   }
 
   return (
-    <React.Fragment>
-      <form onSubmit={handleNewPostSubmission}>
-        <input
-          className="form-input"
-          type="text"
-          name="author"
-          placeholder="Author"
-        />
-        <input
-          className="form-input"
-          type="text"
-          name="title"
-          placeholder="Type here"
-        />
-        <textarea
-          className="form-input"
-          type="text"
-          name="post"
-          placeholder="Type here"
-        />
-        <button type="submit">Post</button>
-      </form>
-      <br />
-    </React.Fragment>
+    <Card>
+      <Grid container spacing={2} columnSpacing={4}>
+        <form onSubmit={handleNewPostSubmission}>
+          <Grid item>
+            <TextField
+              label="Author"
+              className="form-input"
+              type="text"
+              name="author"
+              placeholder="Author"
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Title"
+              className="form-input"
+              type="text"
+              name="title"
+              placeholder="Type here"
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Multiline"
+              rows={2}
+              maxRows={4}
+              multiline
+              className="form-input"
+              type="text"
+              name="post"
+              placeholder="Type here"
+            />
+          </Grid>
+          <Grid>
+            <button className="btn btn-secondary" type="submit">
+              Post
+            </button>
+          </Grid>
+        </form>
+        <br />
+      </Grid>
+    </Card>
   );
 }
 
